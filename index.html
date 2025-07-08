@@ -115,7 +115,7 @@
     .tanggal-upload {
       font-size: 0.85rem;
       color: #555;
-      margin-bottom: 8px;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -146,11 +146,11 @@
   <script>
     const playlist = [
       { 
-        title: "Stecu stecu", 
-        url: "https://dl.dropboxusercontent.com/s/k867azv3gf7po4y505upg/Stecu-Stecu-versi-Jepang-Xiinya.mp3" 
+        title: "BGM dari Google Drive", 
+        url: "https://docs.google.com/uc?export=download&id=1j6mYiL7VHYm80ZBqaKmT_Z4e6KtUgSJO" 
       },
       { 
-        title: "Bgm 2", 
+        title: "Musik BGM Contoh 2", 
         url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" 
       }
     ];
@@ -297,9 +297,9 @@
         div.innerHTML = `
           <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
           <h3>${p.judulHalaman}</h3>
-          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
           ${isiVideo}
           <p>${p.deskripsi}</p>
+          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
         `;
         container.appendChild(div);
       });
@@ -310,4 +310,3 @@
 
 </body>
 </html>
-
