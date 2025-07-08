@@ -34,6 +34,7 @@
       padding: 10px;
       margin-top: 10px;
       border-radius: 5px;
+      transition: background 0.3s ease;
     }
     button:hover { background: #003366; }
     .video-card {
@@ -57,32 +58,71 @@
       text-align: center;
       font-size: 18px;
       user-select: none;
+      transition: background 0.3s ease;
     }
     .hapus-btn:hover { background: #cc0000; }
-    #bgm-control {
+    /* Kontrol BGM tombol kecil fixed di pojok bawah kanan */
+    #bgm-toggle-btn {
       position: fixed;
-      top: 10px; left: 10px;
-      background: rgba(0,0,0,0.6);
-      padding: 8px 12px;
-      border-radius: 8px;
+      bottom: 15px;
+      right: 15px;
+      background: #007bff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 10000;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+    #bgm-toggle-btn:hover {
+      background: #0056b3;
+    }
+    /* Popup menu BGM */
+    #bgm-popup {
+      position: fixed;
+      bottom: 75px;
+      right: 15px;
+      width: 280px;
+      background: rgba(0,0,0,0.9);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      color: white;
+      z-index: 9999;
+      display: none;
       flex-direction: column;
       gap: 10px;
-      z-index: 1000;
-      width: 250px;
-      color: white;
     }
-    #bgm-control select, #bgm-control button {
-      padding: 6px; font-size: 1rem; border-radius: 5px; border: none;
+    #bgm-popup label {
+      font-weight: bold;
     }
-    #bgm-control button {
-      background: #007bff; color: white; cursor: pointer;
+    #bgm-popup select, #bgm-popup button {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
     }
-    #bgm-control button:hover { background: #0056b3; }
+    #bgm-popup button {
+      background: #007bff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #bgm-popup button:hover {
+      background: #0056b3;
+    }
     #bgm-status {
       font-size: 0.9rem;
       min-height: 18px;
       color: #ddd;
+      text-align: center;
     }
     .tanggal-upload {
       font-size: 0.85rem;
@@ -95,16 +135,6 @@
       body {
         padding: 10px;
         max-width: 100%;
-      }
-      #bgm-control {
-        position: static;
-        width: 100%;
-        margin-bottom: 15px;
-        background: #004080;
-      }
-      #bgm-control select,
-      #bgm-control button {
-        width: 100%;
       }
       .video-card img {
         width: 100%;
@@ -124,8 +154,12 @@
   </style>
 </head>
 <body>
-  <div id="bgm-control">
-    <label for="playlist">Pilih Musik Background:</label>
+  <!-- Tombol kecil untuk toggle popup BGM -->
+  <button id="bgm-toggle-btn" aria-label="Toggle menu musik BGM">🎵</button>
+
+  <!-- Popup menu BGM -->
+  <div id="bgm-popup" role="dialog" aria-modal="true" aria-labelledby="bgm-popup-label">
+    <label id="bgm-popup-label" for="playlist">Pilih Musik Background:</label>
     <select id="playlist">
       <option value="0">Multo – Cup of Joe</option>
       <option value="1">Stecu – Instrumental</option>
@@ -158,6 +192,8 @@
     const select = document.getElementById("playlist");
     const toggle = document.getElementById("toggle-play");
     const status = document.getElementById("bgm-status");
+    const popup = document.getElementById("bgm-popup");
+    const toggleBtn = document.getElementById("bgm-toggle-btn");
 
     function setAudioSource(index) {
       const item = playlist[index];
@@ -189,6 +225,22 @@
     });
 
     setAudioSource(0);
+
+    // Toggle popup menu BGM
+    toggleBtn.addEventListener("click", () => {
+      if (popup.style.display === "flex") {
+        popup.style.display = "none";
+      } else {
+        popup.style.display = "flex";
+      }
+    });
+
+    // Klik di luar popup akan tutup popup
+    document.addEventListener("click", (e) => {
+      if (!popup.contains(e.target) && e.target !== toggleBtn) {
+        popup.style.display = "none";
+      }
+    });
 
     // 📹 Fitur presentasi
     function getVideoId(url) {
