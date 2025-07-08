@@ -13,13 +13,6 @@
       color: white;
       position: relative;
     }
-    iframe {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: none;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
     textarea, input {
       width: 100%;
       padding: 10px;
@@ -28,12 +21,10 @@
       border-radius: 5px;
       border: none;
       box-sizing: border-box;
-    }
-    textarea { resize: none; min-height: 80px; }
-    input, textarea {
       background: #d1d1d1;
       color: #333;
     }
+    textarea { resize: none; min-height: 80px; }
     button {
       background: #004080;
       color: white;
@@ -54,12 +45,18 @@
       position: relative;
     }
     .hapus-btn {
-      position: absolute; top: 8px; right: 8px;
-      background: red; color: black; border: none;
-      font-weight: bold; cursor: pointer;
-      border-radius: 50%; width: 24px; height: 24px;
-      line-height: 20px; text-align: center;
-      font-size: 18px; user-select: none;
+      position: absolute;
+      top: 8px; right: 8px;
+      background: red; color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 24px; height: 24px;
+      line-height: 20px;
+      text-align: center;
+      font-size: 18px;
+      user-select: none;
     }
     .hapus-btn:hover { background: #cc0000; }
     #bgm-control {
@@ -78,28 +75,35 @@
     #bgm-control select, #bgm-control button {
       padding: 6px; font-size: 1rem; border-radius: 5px; border: none;
     }
-    #bgm-control button { background: #007bff; color: white; cursor: pointer; }
+    #bgm-control button {
+      background: #007bff; color: white; cursor: pointer;
+    }
     #bgm-control button:hover { background: #0056b3; }
     #bgm-status {
-      font-size: 0.9rem; min-height: 18px; color: #ddd;
+      font-size: 0.9rem;
+      min-height: 18px;
+      color: #ddd;
     }
     .tanggal-upload {
-      font-size: 0.85rem; color: #555; margin-top: 8px;
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
- <div id="bgm-control">
-  <label for="playlist">Pilih Musik Background:</label>
-  <select id="playlist">
-    <option value="0">Multo – Cup of Joe</option>
-    <option value="1">Stecu – Instrumental</option>
-  </select>
-  <button id="toggle-play" disabled>Play Musik BGM</button>
-  <div id="bgm-status"></div>
-</div>
+  <div id="bgm-control">
+    <label for="playlist">Pilih Musik Background:</label>
+    <select id="playlist">
+      <option value="0">Multo – Cup of Joe</option>
+      <option value="1">Stecu – Instrumental</option>
+    </select>
+    <button id="toggle-play" disabled>Play Musik BGM</button>
+    <div id="bgm-status"></div>
+  </div>
 
-<audio id="bgm" loop></audio>
+  <audio id="bgm" loop></audio>
+
   <h1>📚 Dashboard Presentasi Simpel</h1>
   <div>
     <input type="text" id="judul-presentasi" placeholder="Judul Presentasi" />
@@ -107,103 +111,54 @@
     <textarea id="video-desc" placeholder="Deskripsi Presentasi"></textarea>
     <button onclick="tambahPresentasi()">➕ Tambah Presentasi</button>
   </div>
+
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
+
   <script>
-
+    // 🎵 Playlist audio lokal
     const playlist = [
-    { title: "Multo – Cup of Joe", url: "assets/audio/multo.mp3" },
-    { title: "Stecu – Instrumental", url: "assets/audio/stecu.mp3" }
-  ];
+      { title: "Multo – Cup of Joe", url: "assets/audio/multo.mp3" },
+      { title: "Stecu – Instrumental", url: "assets/audio/stecu.mp3" }
+    ];
 
-  const audio = document.getElementById("bgm");
-  const select = document.getElementById("playlist");
-  const toggle = document.getElementById("toggle-play");
-  const status = document.getElementById("bgm-status");
+    const audio = document.getElementById("bgm");
+    const select = document.getElementById("playlist");
+    const toggle = document.getElementById("toggle-play");
+    const status = document.getElementById("bgm-status");
 
-  function setAudioSource(index) {
-    const item = playlist[index];
-    if (!item) return;
-    audio.pause();
-    audio.src = item.url;
-    audio.load();
-    toggle.disabled = false;
-    toggle.textContent = "Play Musik BGM";
-    status.textContent = `Ready to play: ${item.title}`;
-  }
-
-  select.addEventListener("change", () => setAudioSource(select.value));
-  toggle.addEventListener("click", () => {
-    const item = playlist[select.value];
-    if (audio.paused) {
-      audio.play()
-        .then(() => {
-          toggle.textContent = "Pause Musik BGM";
-          status.textContent = `Memutar: ${item.title}`;
-        })
-        .catch(() => status.textContent = "🔇 Klik play lagi.");
-    } else {
+    function setAudioSource(index) {
+      const item = playlist[index];
+      if (!item) return;
       audio.pause();
-      toggle.textContent = "Play Musik BGM";
-      status.textContent = `Paused: ${item.title}`;
-    }
-  });
-  setAudioSource(0);
-
-    function setAudio(src) {
-      audio.src = src;
+      audio.src = item.url;
       audio.load();
-      toggle.disabled = !src;
+      toggle.disabled = false;
       toggle.textContent = "Play Musik BGM";
-      status.textContent = src
-        ? `Ready to play: ${playlist[select.value].title}`
-        : "";
-      scFrame.style.display = "none";
-      audio.pause();
+      status.textContent = `Ready to play: ${item.title}`;
     }
 
-    select.addEventListener("change", () => {
-      if (select.value == "0") {
-        setAudio(playlist[0].url);
-      } else {
-        audio.pause();
-        scFrame.style.display = "block";
-        toggle.textContent = "Play Musik BGM";
-        scWidget.pause();
-        status.textContent = `Ready to play: ${playlist[1].title}`;
-        toggle.disabled = false;
-      }
-    });
+    select.addEventListener("change", () => setAudioSource(select.value));
 
     toggle.addEventListener("click", () => {
-      if (select.value == "0") {
-        if (audio.paused) {
-          audio.play().then(() => {
-            toggle.textContent = "Pause Musik BGM";
-            status.textContent = `Memutar: ${playlist[0].title}`;
-          });
-        } else {
-          audio.pause();
-          toggle.textContent = "Play Musik BGM";
-          status.textContent = `Paused: ${playlist[0].title}`;
-        }
-      } else {
-        scWidget.isPaused(paused => {
-          if (paused) {
-            scWidget.play();
-            toggle.textContent = "Pause Musik BGM";
-            status.textContent = `Memutar: ${playlist[1].title}`;
-          } else {
-            scWidget.pause();
-            toggle.textContent = "Play Musik BGM";
-            status.textContent = `Paused: ${playlist[1].title}`;
-          }
+      const item = playlist[select.value];
+      if (audio.paused) {
+        audio.play().then(() => {
+          toggle.textContent = "Pause Musik BGM";
+          status.textContent = `Memutar: ${item.title}`;
+        }).catch(() => {
+          status.textContent = "🔇 Klik play lagi.";
         });
+      } else {
+        audio.pause();
+        toggle.textContent = "Play Musik BGM";
+        status.textContent = `Paused: ${item.title}`;
       }
     });
 
-    setAudio(playlist[0].url);
+    setAudioSource(0);
 
+    // 📹 Fitur presentasi
     function getVideoId(url) {
       const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
       return m ? m[1] : null;
@@ -212,16 +167,21 @@
     let daftarPresentasi = JSON.parse(localStorage.getItem("daftar_presentasi")) || [];
 
     function formatTanggal(t) {
-      return new Date(t).toLocaleDateString('id-ID', { year:'numeric', month:'short', day:'numeric' });
+      return new Date(t).toLocaleDateString('id-ID', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      });
     }
 
     async function tambahPresentasi() {
       const judul = document.getElementById("judul-presentasi").value.trim();
       const link = document.getElementById("youtube-link").value.trim();
       const deskripsi = document.getElementById("video-desc").value.trim();
+
       if (!judul) { alert("Judul harus diisi."); return; }
+
       const vid = getVideoId(link);
       let thumb, titleVideo, channel;
+
       if (vid) {
         try {
           const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${vid}`);
@@ -231,8 +191,19 @@
           channel = data.author_name;
         } catch (e) { console.warn(e); }
       }
+
       const now = new Date().toISOString();
-      const p = { id: vid||Date.now().toString(), judulHalaman: judul, videoId: vid, titleVideo, channel, thumbnail:thumb, deskripsi, tanggalUpload:now };
+      const p = {
+        id: vid || Date.now().toString(),
+        judulHalaman: judul,
+        videoId: vid,
+        titleVideo,
+        channel,
+        thumbnail: thumb,
+        deskripsi,
+        tanggalUpload: now
+      };
+
       daftarPresentasi.push(p);
       localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
       document.getElementById("judul-presentasi").value = "";
@@ -243,7 +214,7 @@
 
     function hapusPresentasi(id) {
       if (!confirm("Yakin ingin menghapus presentasi ini?")) return;
-      daftarPresentasi = daftarPresentasi.filter(x => x.id!==id);
+      daftarPresentasi = daftarPresentasi.filter(x => x.id !== id);
       localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
       renderDaftar();
     }
@@ -251,7 +222,10 @@
     function renderDaftar() {
       const c = document.getElementById("video-list");
       c.innerHTML = "";
-      if (!daftarPresentasi.length) { c.innerHTML="<p>Belum ada presentasi yang ditambahkan.</p>"; return; }
+      if (!daftarPresentasi.length) {
+        c.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
+        return;
+      }
       daftarPresentasi.forEach(p => {
         const d = document.createElement("div");
         d.className = "video-card";
@@ -273,4 +247,3 @@
   </script>
 </body>
 </html>
-
