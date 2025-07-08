@@ -144,60 +144,65 @@
   <div id="video-list"></div>
 
   <script>
-    const playlist = [
-  { 
-    title: "BGM 1 - Calm Ambient", 
-    url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Lee_Rosevere/Music_For_Podcasts_3/Lee_Rosevere_-_06_-_As_I_Was_Saying.mp3" 
+    <script>
+const playlist = [
+  {
+    title: "BGM 1 - Calm Ambient",
+    url: "https://cdn.freesound.org/previews/620/620938_5674468-lq.mp3"
   },
-  { 
-    title: "BGM 2 - Chill Loop", 
-    url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Ketsa/Mission_Ready/Ketsa_-_07_-_Take_Your_Time.mp3" 
+  {
+    title: "BGM 2 - Chill Vibe",
+    url: "https://cdn.freesound.org/previews/620/620939_5674468-lq.mp3"
   }
-    ];
-    
+];
 
-    const audio = document.getElementById("bgm");
-    const select = document.getElementById("playlist");
-    const toggleBtn = document.getElementById("toggle-play");
-    const bgmStatus = document.getElementById("bgm-status");
+const audio = document.getElementById("bgm");
+const select = document.getElementById("playlist");
+const toggleBtn = document.getElementById("toggle-play");
+const bgmStatus = document.getElementById("bgm-status");
 
-    function populatePlaylist() {
-      select.innerHTML = "";
-      playlist.forEach((item, i) => {
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = item.title;
-        select.appendChild(opt);
-      });
-    }
+function populatePlaylist() {
+  select.innerHTML = "";
+  playlist.forEach((item, i) => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = item.title;
+    select.appendChild(opt);
+  });
+}
 
-    function setAudioSource(index) {
-      const item = playlist[index];
-      if (!item) return;
-      audio.src = item.url;
-      audio.load();
-      audio.play().catch(() => { toggleBtn.textContent = "Play Musik BGM"; });
-      toggleBtn.disabled = false;
-      toggleBtn.textContent = "Pause Musik BGM";
-      bgmStatus.textContent = `Memutar: ${item.title}`;
-    }
+function setAudioSource(index) {
+  const item = playlist[index];
+  if (!item) return;
+  audio.src = item.url;
+  audio.volume = 1.0; // Set volume ke maksimum
+  audio.load();
+  audio.play().then(() => {
+    toggleBtn.textContent = "Pause";
+    bgmStatus.textContent = `Memutar: ${item.title}`;
+  }).catch(err => {
+    bgmStatus.textContent = "🔇 Audio tidak bisa diputar otomatis. Klik Play.";
+    console.error(err);
+  });
+  toggleBtn.disabled = false;
+}
 
-    select.addEventListener("change", () => {
-      setAudioSource(select.value);
-    });
+select.addEventListener("change", () => {
+  setAudioSource(select.value);
+});
 
-    toggleBtn.addEventListener("click", () => {
-      if(audio.paused && audio.src) {
-        audio.play();
-        toggleBtn.textContent = "Pause Musik BGM";
-      } else {
-        audio.pause();
-        toggleBtn.textContent = "Play Musik BGM";
-      }
-    });
+toggleBtn.addEventListener("click", () => {
+  if (audio.paused && audio.src) {
+    audio.play();
+    toggleBtn.textContent = "Pause";
+  } else {
+    audio.pause();
+    toggleBtn.textContent = "Play";
+  }
+});
 
-    populatePlaylist();
-    setAudioSource(0);
+populatePlaylist();
+setAudioSource(0);
 
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
