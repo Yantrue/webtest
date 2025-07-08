@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Halaman Video</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    iframe { width: 560px; height: 315px; max-width: 100%; }
+    .content { max-width: 700px; margin: auto; background: #fefefe; padding: 20px; border: 1px solid #ccc; }
+    textarea { width: 100%; height: 100px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <a href="index.html">← Kembali ke Daftar</a>
+    <h2 id="title">Judul Video</h2>
+    <iframe id="player" src="" frameborder="0" allowfullscreen></iframe>
+    <p><strong>Channel:</strong> <span id="channel"></span></p>
+    <img id="thumbnail" src="" alt="Thumbnail" width="300">
+    <h3>Deskripsi</h3>
+    <p id="desc">Memuat...</p>
+    <textarea id="desc-editor"></textarea>
+    <button onclick="saveDesc()">💾 Simpan Deskripsi</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get("v");
+    const videos = JSON.parse(localStorage.getItem("video_presentasi")) || [];
+    const video = videos.find(v => v.videoId === videoId);
+
+    if (!video) {
+      document.body.innerHTML = "<p>Video tidak ditemukan. <a href='index.html'>Kembali</a></p>";
+    } else {
+      document.getElementById("title").textContent = video.title;
+      document.getElementById("player").src = `https://www.youtube.com/embed/${video.videoId}`;
+      document.getElementById("channel").textContent = video.channel;
+      document.getElementById("thumbnail").src = video.thumbnail;
+      document.getElementById("desc").textContent = video.description;
+      document.getElementById("desc-editor").value = video.description;
+    }
+
+    function saveDesc() {
+      const newDesc = document.getElementById("desc-editor").value.trim();
+      if (!newDesc) return;
+      const index = videos.findIndex(v => v.videoId === videoId);
+      videos[index].description = newDesc;
+      localStorage.setItem("video_presentasi", JSON.stringify(videos));
+      document.getElementById("desc").textContent = newDesc;
+      alert("Deskripsi disimpan!");
+    }
+  </script>
+
+</body>
+</html>
