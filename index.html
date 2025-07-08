@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Presentasi Video Dinamis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    input, textarea, button {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    iframe {
+      margin-top: 15px;
+      width: 560px;
+      height: 315px;
+      max-width: 100%;
+    }
+    .video-card {
+      background: #fff;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📽️ Presentasi Video YouTube Dinamis</h1>
+
+  <input type="text" id="youtube-link" placeholder="Tempelkan link YouTube di sini">
+  <textarea id="video-desc" placeholder="Tambahkan deskripsi video di sini"></textarea>
+  <button onclick="addVideo()">➕ Tambahkan Video</button>
+
+  <div id="video-list"></div>
+
+  <script>
+    // Fungsi ambil ID dari link YouTube
+    function getVideoId(url) {
+      const regex = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const match = url.match(regex);
+      return match ? match[1] : null;
+    }
+
+    // Ambil video dari localStorage dan tampilkan
+    let videos = JSON.parse(localStorage.getItem("video_presentasi")) || [];
+
+    function renderVideos() {
+      const container = document.getElementById("video-list");
+      container.innerHTML = "";
+      videos.forEach((video, index) => {
+        const videoCard = document.createElement("div");
+        videoCard.className = "video-card";
+
+        videoCard.innerHTML = `
+          <h2>${video.title}</h2>
+          <iframe src="https://www.youtube.com/embed/${video.videoId}" frameborder="0" allowfullscreen></iframe>
+          <p><strong>Channel:</strong> ${video.channel}</p>
+          <img src="${video.thumbnail}" alt="Thumbnail" width="300">
+          <h3>Deskripsi:</h3>
+          <p contenteditable="true" oninput="updateDesc(${index}, this.innerText)">${video.description}</p>
+        `;
+        container.appendChild(videoCard);
+      });
+    }
+
+    function updateDesc(index, newDesc) {
+      videos[index].description = newDesc;
+      localStorage.setItem("video_presentasi", JSON.stringify(videos));
+    }
+
+    // Tambah video baru
+    async function addVideo() {
+      const url = document.getElementById("youtube-link").value.trim();
+      const desc = document.getElementById("video-desc").value.trim();
+      const videoId = getVideoId(url);
+
+      if (!videoId) {
+        alert("Link YouTube tidak valid.");
+        return;
+      }
+
+      // Ambil info video dari noembed.com
+      const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+      const data = await response.json();
+
+      if (!data.title) {
+        alert("Gagal memuat data video.");
+        return;
+      }
+
+      const newVideo = {
+        videoId: videoId,
+        title: data.title,
+        channel: data.author_name,
+        thumbnail: data.thumbnail_url,
+        description: desc
+      };
+
+      videos.push(newVideo);
+      localStorage.setItem("video_presentasi", JSON.stringify(videos));
+      document.getElementById("youtube-link").value = "";
+      document.getElementById("video-desc").value = "";
+      renderVideos();
+    }
+
+    // Tampilkan saat pertama kali
+    renderVideos();
+  </script>
+
+</body>
+</html>
