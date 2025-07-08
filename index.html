@@ -143,18 +143,22 @@
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
 
-  <script>
-    const playlist = [
-      { 
-        title: "BGM dari Google Drive", 
-        url: "https://docs.google.com/uc?export=download&id=1j6mYiL7VHYm80ZBqaKmT_Z4e6KtUgSJO" 
-      },
-      { 
-        title: "Musik BGM Contoh 2", 
-        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" 
-      }
-    ];
+ <audio id="bgm" src="https://raw.githubusercontent.com/Yantrue/webtest/main/music/stecu.mp3" loop autoplay></audio>
 
+<script>
+  const audio = document.getElementById('bgm');
+  audio.volume = 0.3; // atur volume sesuai selera
+  audio.play().catch(() => {
+    // jika autoplay diblokir browser, tampilkan tombol play
+    const playBtn = document.createElement('button');
+    playBtn.textContent = "Play Musik BGM";
+    playBtn.onclick = () => {
+      audio.play();
+      playBtn.remove();
+    };
+    document.body.appendChild(playBtn);
+  });
+  
     const audio = document.getElementById("bgm");
     const select = document.getElementById("playlist");
     const toggleBtn = document.getElementById("toggle-play");
