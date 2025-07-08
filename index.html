@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <title>Dashboard Presentasi Simpel dengan Tanggal & BGM</title>
   <style>
-    body { 
-      font-family: Arial; 
-      padding: 20px; 
-      max-width: 700px; 
-      margin: auto; 
-      background: #26619c; 
+    body {
+      font-family: Arial;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #26619c;
       color: white;
       position: relative;
     }
@@ -51,7 +51,7 @@
       background: #003366;
     }
     .video-card {
-      background: #b0b0b0; 
+      background: #b0b0b0;
       padding: 15px;
       margin-bottom: 20px;
       border-radius: 8px;
@@ -144,65 +144,65 @@
   <div id="video-list"></div>
 
   <script>
-    <script>
-const playlist = [
-  {
-    title: "BGM 1 - Calm Ambient",
-    url: "https://cdn.freesound.org/previews/620/620938_5674468-lq.mp3"
-  },
-  {
-    title: "BGM 2 - Chill Vibe",
-    url: "https://cdn.freesound.org/previews/620/620939_5674468-lq.mp3"
-  }
-];
+    const playlist = [
+      {
+        title: "BGM 1 - Calm Ambient",
+        url: "https://cdn.freesound.org/previews/620/620938_5674468-lq.mp3"
+      },
+      {
+        title: "BGM 2 - Chill Vibe",
+        url: "https://cdn.freesound.org/previews/620/620939_5674468-lq.mp3"
+      }
+    ];
 
-const audio = document.getElementById("bgm");
-const select = document.getElementById("playlist");
-const toggleBtn = document.getElementById("toggle-play");
-const bgmStatus = document.getElementById("bgm-status");
+    const audio = document.getElementById("bgm");
+    const select = document.getElementById("playlist");
+    const toggleBtn = document.getElementById("toggle-play");
+    const bgmStatus = document.getElementById("bgm-status");
 
-function populatePlaylist() {
-  select.innerHTML = "";
-  playlist.forEach((item, i) => {
-    const opt = document.createElement("option");
-    opt.value = i;
-    opt.textContent = item.title;
-    select.appendChild(opt);
-  });
-}
+    function populatePlaylist() {
+      select.innerHTML = "";
+      playlist.forEach((item, i) => {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = item.title;
+        select.appendChild(opt);
+      });
+    }
 
-function setAudioSource(index) {
-  const item = playlist[index];
-  if (!item) return;
-  audio.src = item.url;
-  audio.volume = 1.0; // Set volume ke maksimum
-  audio.load();
-  audio.play().then(() => {
-    toggleBtn.textContent = "Pause";
-    bgmStatus.textContent = `Memutar: ${item.title}`;
-  }).catch(err => {
-    bgmStatus.textContent = "🔇 Audio tidak bisa diputar otomatis. Klik Play.";
-    console.error(err);
-  });
-  toggleBtn.disabled = false;
-}
+    function setAudioSource(index) {
+      const item = playlist[index];
+      if (!item) return;
+      audio.src = item.url;
+      audio.volume = 1; // set volume ke maksimum
+      audio.load();
+      audio.play().then(() => {
+        toggleBtn.textContent = "Pause Musik BGM";
+        bgmStatus.textContent = `Memutar: ${item.title}`;
+      }).catch(err => {
+        toggleBtn.textContent = "Play Musik BGM";
+        bgmStatus.textContent = "🔇 Audio tidak bisa diputar otomatis. Klik Play.";
+        console.error(err);
+      });
+      toggleBtn.disabled = false;
+    }
 
-select.addEventListener("change", () => {
-  setAudioSource(select.value);
-});
+    select.addEventListener("change", () => {
+      setAudioSource(select.value);
+    });
 
-toggleBtn.addEventListener("click", () => {
-  if (audio.paused && audio.src) {
-    audio.play();
-    toggleBtn.textContent = "Pause";
-  } else {
-    audio.pause();
-    toggleBtn.textContent = "Play";
-  }
-});
+    toggleBtn.addEventListener("click", () => {
+      if (audio.paused && audio.src) {
+        audio.play();
+        toggleBtn.textContent = "Pause Musik BGM";
+      } else {
+        audio.pause();
+        toggleBtn.textContent = "Play Musik BGM";
+      }
+    });
 
-populatePlaylist();
-setAudioSource(0);
+    populatePlaylist();
+    setAudioSource(0);
 
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
@@ -241,7 +241,7 @@ setAudioSource(0);
             channel = data.author_name;
           }
         } catch {
-          // gagal ambil data video, tetap tambah presentasi tanpa video
+          // gagal ambil data video, tetap lanjut
         }
       }
 
@@ -279,6 +279,8 @@ setAudioSource(0);
       const container = document.getElementById("video-list");
       container.innerHTML = "";
 
+      if (daftarPresentasi.length === 0) {
+        container.innerHTML = "<p>Bel
       if (daftarPresentasi.length === 0) {
         container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
         return;
