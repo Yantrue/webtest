@@ -79,39 +79,6 @@
     .hapus-btn:hover {
       background: #cc0000;
     }
-    #bgm-control {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.6);
-      padding: 8px 12px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
-      width: 250px;
-      color: white;
-    }
-    #bgm-control select, #bgm-control button {
-      padding: 6px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-    }
-    #bgm-control button {
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-    #bgm-control button:hover {
-      background: #0056b3;
-    }
-    #bgm-status {
-      font-size: 0.9rem;
-      min-height: 18px;
-      color: #ddd;
-    }
     .tanggal-upload {
       font-size: 0.85rem;
       color: #555;
@@ -120,16 +87,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Kontrol musik BGM -->
-  <div id="bgm-control">
-    <label for="playlist">Pilih Musik Background:</label>
-    <select id="playlist"></select>
-    <button id="toggle-play" disabled>Play</button>
-    <div id="bgm-status"></div>
-  </div>
-
-  <audio id="bgm" loop></audio>
 
   <h1>📚 Dashboard Presentasi Simpel</h1>
 
@@ -143,64 +100,27 @@
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
 
- <audio id="bgm" src="https://raw.githubusercontent.com/Yantrue/webtest/main/music/stecu.mp3" loop autoplay></audio>
+  <!-- Audio BGM -->
+  <audio id="bgm" src="https://raw.githubusercontent.com/Yantrue/webtest/main/music/stecu.mp3" loop autoplay></audio>
 
-<script>
-  const audio = document.getElementById('bgm');
-  audio.volume = 0.3; // atur volume sesuai selera
-  audio.play().catch(() => {
-    // jika autoplay diblokir browser, tampilkan tombol play
-    const playBtn = document.createElement('button');
-    playBtn.textContent = "Play Musik BGM";
-    playBtn.onclick = () => {
-      audio.play();
-      playBtn.remove();
-    };
-    document.body.appendChild(playBtn);
-  });
-  
-    const audio = document.getElementById("bgm");
-    const select = document.getElementById("playlist");
-    const toggleBtn = document.getElementById("toggle-play");
-    const bgmStatus = document.getElementById("bgm-status");
-
-    function populatePlaylist() {
-      select.innerHTML = "";
-      playlist.forEach((item, i) => {
-        const opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = item.title;
-        select.appendChild(opt);
-      });
-    }
-
-    function setAudioSource(index) {
-      const item = playlist[index];
-      if (!item) return;
-      audio.src = item.url;
-      audio.load();
-      audio.play().catch(() => { toggleBtn.textContent = "Play"; });
-      toggleBtn.disabled = false;
-      toggleBtn.textContent = "Pause";
-      bgmStatus.textContent = `Memutar: ${item.title}`;
-    }
-
-    select.addEventListener("change", () => {
-      setAudioSource(select.value);
-    });
-
-    toggleBtn.addEventListener("click", () => {
-      if(audio.paused && audio.src) {
+  <script>
+    const audio = document.getElementById('bgm');
+    audio.volume = 0.3;
+    audio.play().catch(() => {
+      // autoplay diblokir browser, tampilkan tombol play manual
+      const playBtn = document.createElement('button');
+      playBtn.textContent = "Play Musik BGM";
+      playBtn.style.position = "fixed";
+      playBtn.style.top = "10px";
+      playBtn.style.left = "10px";
+      playBtn.style.padding = "10px";
+      playBtn.style.zIndex = "10000";
+      playBtn.onclick = () => {
         audio.play();
-        toggleBtn.textContent = "Pause";
-      } else {
-        audio.pause();
-        toggleBtn.textContent = "Play";
-      }
+        playBtn.remove();
+      };
+      document.body.appendChild(playBtn);
     });
-
-    populatePlaylist();
-    setAudioSource(0);
 
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
