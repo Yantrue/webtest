@@ -89,22 +89,17 @@
   </style>
 </head>
 <body>
-  <div id="bgm-control">
-    <label for="playlist">Pilih Musik Background:</label>
-    <select id="playlist">
-      <option value="0">BGM 1 - Calm Ambient</option>
-      <option value="1">Multo – Cup of Joe (Jan Cristobal Remix)</option>
-    </select>
-    <button id="toggle-play" disabled>Play Musik BGM</button>
-    <div id="bgm-status"></div>
-    <iframe id="sc-player" width="100%" height="60"
-      scrolling="no" frameborder="no" allow="autoplay"
-      style="display:none"
-      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1584127813&color=%230071f0&auto_play=false">
-    </iframe>
-  </div>
-  <script src="https://w.soundcloud.com/player/api.js"></script>
-  <audio id="bgm" loop></audio>
+ <div id="bgm-control">
+  <label for="playlist">Pilih Musik Background:</label>
+  <select id="playlist">
+    <option value="0">Multo – Cup of Joe</option>
+    <option value="1">Stecu – Instrumental</option>
+  </select>
+  <button id="toggle-play" disabled>Play Musik BGM</button>
+  <div id="bgm-status"></div>
+</div>
+
+<audio id="bgm" loop></audio>
   <h1>📚 Dashboard Presentasi Simpel</h1>
   <div>
     <input type="text" id="judul-presentasi" placeholder="Judul Presentasi" />
@@ -115,16 +110,45 @@
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
   <script>
+
     const playlist = [
-      { title: "BGM 1 - Calm Ambient", url: "https://cdn.freesound.org/previews/620/620938_5674468-lq.mp3" },
-      { title: "Multo – Cup of Joe", url: "assets/audio/multo.mp3" }
-    ];
-    const audio = document.getElementById("bgm");
-    const select = document.getElementById("playlist");
-    const toggle = document.getElementById("toggle-play");
-    const status = document.getElementById("bgm-status");
-    const scFrame = document.getElementById("sc-player");
-    const scWidget = SC.Widget(scFrame);
+    { title: "Multo – Cup of Joe", url: "assets/audio/multo.mp3" },
+    { title: "Stecu – Instrumental", url: "assets/audio/stecu.mp3" }
+  ];
+
+  const audio = document.getElementById("bgm");
+  const select = document.getElementById("playlist");
+  const toggle = document.getElementById("toggle-play");
+  const status = document.getElementById("bgm-status");
+
+  function setAudioSource(index) {
+    const item = playlist[index];
+    if (!item) return;
+    audio.pause();
+    audio.src = item.url;
+    audio.load();
+    toggle.disabled = false;
+    toggle.textContent = "Play Musik BGM";
+    status.textContent = `Ready to play: ${item.title}`;
+  }
+
+  select.addEventListener("change", () => setAudioSource(select.value));
+  toggle.addEventListener("click", () => {
+    const item = playlist[select.value];
+    if (audio.paused) {
+      audio.play()
+        .then(() => {
+          toggle.textContent = "Pause Musik BGM";
+          status.textContent = `Memutar: ${item.title}`;
+        })
+        .catch(() => status.textContent = "🔇 Klik play lagi.");
+    } else {
+      audio.pause();
+      toggle.textContent = "Play Musik BGM";
+      status.textContent = `Paused: ${item.title}`;
+    }
+  });
+  setAudioSource(0);
 
     function setAudio(src) {
       audio.src = src;
