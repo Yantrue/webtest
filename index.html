@@ -2,174 +2,171 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard Presentasi</title>
+  <title>Dashboard Presentasi Simpel dengan Tanggal & BGM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       padding: 20px;
       max-width: 700px;
       margin: auto;
       background: #26619c;
       color: white;
       position: relative;
+      font-size: 18px; /* lebih besar default font */
+      line-height: 1.5;
     }
-    textarea, input {
+    /* Buat body full width untuk layar kecil */
+    @media (max-width: 700px) {
+      body {
+        max-width: 100%;
+        padding: 20px 15px;
+        font-size: 20px; /* lebih besar lagi di hp */
+      }
+    }
+
+    input, textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 1rem;
-      border-radius: 5px;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 1.2rem;
+      border-radius: 8px;
       border: none;
       box-sizing: border-box;
       background: #d1d1d1;
       color: #333;
+      font-weight: 600;
     }
-    textarea { resize: none; min-height: 80px; }
+    textarea { resize: none; min-height: 100px; }
     button {
       background: #004080;
       color: white;
       cursor: pointer;
       font-weight: bold;
       border: none;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 1.3rem;
       transition: background 0.3s ease;
     }
-    button:hover { background: #003366; }
+    button:hover {
+      background: #003366;
+    }
     .video-card {
       background: #b0b0b0;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 12px;
       color: black;
       position: relative;
+      font-size: 1.1rem;
     }
     .hapus-btn {
       position: absolute;
-      top: 8px; right: 8px;
+      top: 10px; right: 10px;
       background: red; color: black;
       border: none;
       font-weight: bold;
       cursor: pointer;
       border-radius: 50%;
-      width: 24px; height: 24px;
-      line-height: 20px;
+      width: 28px; height: 28px;
+      line-height: 24px;
       text-align: center;
-      font-size: 18px;
+      font-size: 20px;
       user-select: none;
       transition: background 0.3s ease;
     }
-    .hapus-btn:hover { background: #cc0000; }
-    /* Kontrol BGM tombol kecil fixed di pojok bawah kanan */
+    .hapus-btn:hover {
+      background: #cc0000;
+    }
+
+    #bgm-control {
+      position: fixed;
+      bottom: 80px;
+      right: 15px;
+      background: rgba(0,0,0,0.85);
+      padding: 20px;
+      border-radius: 14px;
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 10000;
+      width: 280px;
+      color: white;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.7);
+      font-size: 1.1rem;
+    }
+    #bgm-control label {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    #bgm-control select, #bgm-control button {
+      padding: 12px; 
+      font-size: 1.1rem; 
+      border-radius: 8px; 
+      border: none;
+      width: 100%;
+      font-weight: 600;
+    }
+    #bgm-control button {
+      background: #007bff; 
+      color: white; 
+      cursor: pointer;
+      font-weight: 700;
+    }
+    #bgm-control button:hover {
+      background: #0056b3;
+    }
+    #bgm-status {
+      font-size: 1rem;
+      min-height: 22px;
+      color: #ddd;
+      text-align: center;
+    }
+
+    .tanggal-upload {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    /* Tombol toggle bgm (musik) di pojok kanan bawah */
     #bgm-toggle-btn {
       position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: #007bff;
+      bottom: 20px;
+      right: 20px;
+      background: #cc0000;
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       color: white;
-      font-size: 28px;
+      font-size: 32px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      z-index: 10000;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+      z-index: 10001;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background 0.3s ease;
     }
     #bgm-toggle-btn:hover {
-      background: #0056b3;
-    }
-    /* Popup menu BGM */
-    #bgm-popup {
-      position: fixed;
-      bottom: 75px;
-      right: 15px;
-      width: 280px;
-      background: rgba(0,0,0,0.9);
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      color: white;
-      z-index: 9999;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-    }
-    #bgm-popup label {
-      font-weight: bold;
-    }
-    #bgm-popup select, #bgm-popup button {
-      width: 100%;
-      padding: 8px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-    }
-    #bgm-popup button {
-      background: #007bff;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #bgm-popup button:hover {
-      background: #0056b3;
-    }
-    #bgm-status {
-      font-size: 0.9rem;
-      min-height: 18px;
-      color: #ddd;
-      text-align: center;
-    }
-    .tanggal-upload {
-      font-size: 0.85rem;
-      color: #555;
-      margin-top: 8px;
+      background: #990000;
     }
 
-    /* ===== Responsif untuk layar kecil (HP) ===== */
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-        max-width: 100%;
-      }
-      .video-card img {
-        width: 100%;
-        height: auto;
-      }
-      .hapus-btn {
-        top: 5px;
-        right: 5px;
-        width: 22px;
-        height: 22px;
-        font-size: 16px;
-      }
-      h1, h2 {
-        font-size: 1.4rem;
+    /* Responsive tweaks */
+    @media (max-width: 480px) {
+      #bgm-control {
+        width: 90vw;
+        right: 5vw;
+        bottom: 80px;
+        font-size: 1.3rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Tombol kecil untuk toggle popup BGM -->
-  <button id="bgm-toggle-btn" aria-label="Toggle menu musik BGM">🎵</button>
-
-  <!-- Popup menu BGM -->
-  <div id="bgm-popup" role="dialog" aria-modal="true" aria-labelledby="bgm-popup-label">
-    <label id="bgm-popup-label" for="playlist">Pilih Musik Background:</label>
-    <select id="playlist">
-      <option value="0">Multo – Cup of Joe</option>
-      <option value="1">Stecu – Instrumental</option>
-    </select>
-    <button id="toggle-play" disabled>Play Musik BGM</button>
-    <div id="bgm-status"></div>
-  </div>
-
-  <audio id="bgm" loop></audio>
-
   <h1>📚 Dashboard Presentasi Simpel</h1>
   <div>
     <input type="text" id="judul-presentasi" placeholder="Judul Presentasi" />
@@ -181,8 +178,22 @@
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
 
+  <!-- Audio BGM dan Kontrol -->
+  <audio id="bgm" loop></audio>
+
+  <div id="bgm-control">
+    <label for="playlist">Pilih Musik Background:</label>
+    <select id="playlist">
+      <option value="0">Multo – Cup of Joe</option>
+      <option value="1">Stecu – Instrumental</option>
+    </select>
+    <button id="toggle-play" disabled>Play Musik BGM</button>
+    <div id="bgm-status"></div>
+  </div>
+
+  <button id="bgm-toggle-btn" title="Buka/Tutup Musik BGM">🎵</button>
+
   <script>
-    // 🎵 Playlist audio lokal
     const playlist = [
       { title: "Multo – Cup of Joe", url: "assets/audio/multo.mp3" },
       { title: "Stecu – Instrumental", url: "assets/audio/stecu.mp3" }
@@ -192,8 +203,8 @@
     const select = document.getElementById("playlist");
     const toggle = document.getElementById("toggle-play");
     const status = document.getElementById("bgm-status");
-    const popup = document.getElementById("bgm-popup");
-    const toggleBtn = document.getElementById("bgm-toggle-btn");
+    const bgmControl = document.getElementById("bgm-control");
+    const bgmToggleBtn = document.getElementById("bgm-toggle-btn");
 
     function setAudioSource(index) {
       const item = playlist[index];
@@ -224,25 +235,17 @@
       }
     });
 
+    bgmToggleBtn.addEventListener("click", () => {
+      if (bgmControl.style.display === "flex") {
+        bgmControl.style.display = "none";
+      } else {
+        bgmControl.style.display = "flex";
+      }
+    });
+
     setAudioSource(0);
 
-    // Toggle popup menu BGM
-    toggleBtn.addEventListener("click", () => {
-      if (popup.style.display === "flex") {
-        popup.style.display = "none";
-      } else {
-        popup.style.display = "flex";
-      }
-    });
-
-    // Klik di luar popup akan tutup popup
-    document.addEventListener("click", (e) => {
-      if (!popup.contains(e.target) && e.target !== toggleBtn) {
-        popup.style.display = "none";
-      }
-    });
-
-    // 📹 Fitur presentasi
+    // Fitur Presentasi
     function getVideoId(url) {
       const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
       return m ? m[1] : null;
