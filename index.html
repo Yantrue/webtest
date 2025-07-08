@@ -2,185 +2,183 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard presentasi</title>
+  <title>Dashboard Presentasi Simpel</title>
   <style>
-  body { 
-    font-family: Arial; 
-    padding: 20px; 
-    max-width: 700px; 
-    margin: auto; 
-    background: #26619c; /* warna lapis lazuli */
-    color: white;
-    position: relative;
-  }
-  iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9; /* menjaga rasio */
-    border: none;
-  }
-  #thumbnail {
-    max-width: 100%;
-    margin-top: 10px;
-  }
-  #desc {
-    white-space: pre-wrap; /* supaya enter di deskripsi tampil */
-    margin-top: 15px;
-  }
-  textarea {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 1rem;
-    padding: 10px;
-    margin-top: 10px;
-    resize: none; /* kita akan atur resize otomatis dengan JS */
-    min-height: 80px;
-  }
-
-  .input-container {
-    max-width: 600px;
-    margin-bottom: 30px;
-  }
-
-  input, textarea, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: none;
-    box-sizing: border-box;
-  }
-
-  input, textarea {
-    background: #d1d1d1;
-    color: #333;
-  }
-
-  button {
-    background: #004080;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-  }
-
-  button:hover {
-    background: #003366;
-  }
-
-  .video-card {
-    background: #b0b0b0; /* abu-abu */
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    border: none;
-    color: black;
-    position: relative;
-  }
-
-  .video-card a {
-    color: black;
-    text-decoration: none;
-  }
-
-  .video-card a:hover {
-    text-decoration: underline;
-  }
-
-  .hapus-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: red;
-    color: black;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    line-height: 20px;
-    text-align: center;
-    padding: 0;
-    font-size: 18px;
-    user-select: none;
-  }
-
-  .hapus-btn:hover {
-    background: #cc0000;
-  }
-
-  /* Styling playlist musik kiri atas */
-  #bgm-control {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.6);
-    padding: 8px 12px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 1000;
-  }
-
-  #bgm-control select {
-    padding: 6px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: none;
-  }
-
-  #bgm-control button {
-    padding: 6px 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: none;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-
-  #bgm-control button:hover {
-    background: #0056b3;
-  }
-
+    body { 
+      font-family: Arial; 
+      padding: 20px; 
+      max-width: 700px; 
+      margin: auto; 
+      background: #26619c; 
+      color: white;
+      position: relative;
+    }
+    iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: none;
+      min-height: 80px;
+    }
+    input, textarea {
+      background: #d1d1d1;
+      color: #333;
+    }
+    button {
+      background: #004080;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #003366;
+    }
+    .video-card {
+      background: #b0b0b0; 
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      color: black;
+      position: relative;
+    }
+    .hapus-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: red;
+      color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      line-height: 20px;
+      text-align: center;
+      padding: 0;
+      font-size: 18px;
+      user-select: none;
+    }
+    .hapus-btn:hover {
+      background: #cc0000;
+    }
+    #bgm-control {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+      width: 250px;
+      color: white;
+    }
+    #bgm-control select, #bgm-control button {
+      padding: 6px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+    }
+    #bgm-control button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    #bgm-control button:hover {
+      background: #0056b3;
+    }
+    #bgm-status {
+      font-size: 0.9rem;
+      min-height: 18px;
+      color: #ddd;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Playlist musik BGM -->
+  <!-- Kontrol musik BGM -->
   <div id="bgm-control">
-    <select id="playlist" disabled>
-      <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" selected>Background Musik</option>
-    </select>
-    <button id="toggle-play">Pause</button>
+    <label for="playlist">Pilih Musik Background:</label>
+    <select id="playlist"></select>
+    <button id="toggle-play" disabled>Play</button>
+    <div id="bgm-status"></div>
   </div>
 
-  <audio id="bgm" autoplay loop></audio>
+  <audio id="bgm" loop></audio>
 
-  <h1>📚 Dashboard Presentasi</h1>
+  <h1>📚 Dashboard Presentasi Simpel</h1>
 
-  <div class="input-container">
-    <input type="text" id="judul-presentasi" placeholder="Judul Halaman Presentasi" />
-    <input type="text" id="youtube-link" placeholder="Link Video YouTube" />
-    <textarea id="video-desc" placeholder="Deskripsi Video"></textarea>
-    <button onclick="tambahVideo()">➕ Tambahkan Presentasi</button>
+  <div>
+    <input type="text" id="judul-presentasi" placeholder="Judul Presentasi" />
+    <input type="text" id="youtube-link" placeholder="Link Video YouTube (optional)" />
+    <textarea id="video-desc" placeholder="Deskripsi Presentasi"></textarea>
+    <button onclick="tambahPresentasi()">➕ Tambah Presentasi</button>
   </div>
 
   <h2>📋 Daftar Presentasi:</h2>
   <div id="video-list"></div>
 
   <script>
-    // Playlist musik (satu lagu saja)
-    const audio = document.getElementById("bgm");
-    const playlist = document.getElementById("playlist");
-    const toggleBtn = document.getElementById("toggle-play");
+    // Playlist musik statis
+    const playlist = [
+      { title: "Musik BGM Contoh 1", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Musik BGM Contoh 2", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }
+    ];
 
-    audio.src = playlist.value;
+    const audio = document.getElementById("bgm");
+    const select = document.getElementById("playlist");
+    const toggleBtn = document.getElementById("toggle-play");
+    const bgmStatus = document.getElementById("bgm-status");
+
+    // Isi dropdown playlist
+    function populatePlaylist() {
+      select.innerHTML = "";
+      playlist.forEach((item, i) => {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = item.title;
+        select.appendChild(opt);
+      });
+    }
+
+    // Set audio source dan putar
+    function setAudioSource(index) {
+      const item = playlist[index];
+      if (!item) return;
+      audio.src = item.url;
+      audio.load();
+      audio.play().catch(() => { toggleBtn.textContent = "Play"; });
+      toggleBtn.disabled = false;
+      toggleBtn.textContent = "Pause";
+      bgmStatus.textContent = `Memutar: ${item.title}`;
+    }
+
+    select.addEventListener("change", () => {
+      setAudioSource(select.value);
+    });
 
     toggleBtn.addEventListener("click", () => {
-      if(audio.paused) {
+      if(audio.paused && audio.src) {
         audio.play();
         toggleBtn.textContent = "Pause";
       } else {
@@ -189,61 +187,71 @@
       }
     });
 
-    audio.play().catch(() => {
-      toggleBtn.textContent = "Play";
-    });
+    populatePlaylist();
+    setAudioSource(0);
 
-    // Dashboard presentasi
+    // Fungsi bantu ambil ID video YouTube
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
       return match ? match[1] : null;
     }
 
-    let daftarVideo = JSON.parse(localStorage.getItem("daftar_presentasi")) || [];
+    let daftarPresentasi = JSON.parse(localStorage.getItem("daftar_presentasi")) || [];
 
-    async function tambahVideo() {
+    async function tambahPresentasi() {
       const judul = document.getElementById("judul-presentasi").value.trim();
       const link = document.getElementById("youtube-link").value.trim();
       const deskripsi = document.getElementById("video-desc").value.trim();
       const videoId = getVideoId(link);
 
-      if (!judul || !videoId) {
-        alert("Judul dan link video harus diisi dengan benar.");
+      if (!judul) {
+        alert("Judul harus diisi.");
         return;
       }
 
-      try {
-        const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-        const data = await res.json();
+      let thumbnail = null;
+      let titleVideo = null;
+      let channel = null;
 
-        if (!data.title) throw new Error("Data video tidak ditemukan");
-
-        const videoBaru = {
-          id: videoId,
-          judulHalaman: judul,
-          title: data.title,
-          channel: data.author_name,
-          thumbnail: data.thumbnail_url,
-          deskripsi
-        };
-
-        daftarVideo.push(videoBaru);
-        localStorage.setItem("daftar_presentasi", JSON.stringify(daftarVideo));
-
-        document.getElementById("judul-presentasi").value = "";
-        document.getElementById("youtube-link").value = "";
-        document.getElementById("video-desc").value = "";
-        renderDaftar();
-
-      } catch (error) {
-        alert("Gagal mengambil data video, coba lagi.");
+      if (link && videoId) {
+        try {
+          const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+          const data = await res.json();
+          if (data.title) {
+            thumbnail = data.thumbnail_url;
+            titleVideo = data.title;
+            channel = data.author_name;
+          }
+        } catch {
+          // gagal ambil data video, biarkan tetap tambah presentasi tanpa video
+        }
       }
+
+      const presentasiBaru = {
+        id: videoId || Date.now().toString(), // pakai id video atau timestamp unik
+        judulHalaman: judul,
+        videoId,
+        titleVideo,
+        channel,
+        thumbnail,
+        deskripsi
+      };
+
+      daftarPresentasi.push(presentasiBaru);
+      localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
+
+      // Clear input
+      document.getElementById("judul-presentasi").value = "";
+      document.getElementById("youtube-link").value = "";
+      document.getElementById("video-desc").value = "";
+
+      renderDaftar();
     }
 
-    function hapusVideo(id) {
+    function hapusPresentasi(id) {
       if (!confirm("Yakin ingin menghapus presentasi ini?")) return;
-      daftarVideo = daftarVideo.filter(v => v.id !== id);
-      localStorage.setItem("daftar_presentasi", JSON.stringify(daftarVideo));
+      daftarPresentasi = daftarPresentasi.filter(p => p.id !== id);
+      localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
       renderDaftar();
     }
 
@@ -251,32 +259,38 @@
       const container = document.getElementById("video-list");
       container.innerHTML = "";
 
-      if (daftarVideo.length === 0) {
+      if (daftarPresentasi.length === 0) {
         container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
         return;
       }
 
-      daftarVideo.forEach(video => {
+      daftarPresentasi.forEach(p => {
         const div = document.createElement("div");
         div.className = "video-card";
+
+        let isiVideo = "";
+        if (p.videoId) {
+          isiVideo = `
+            <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
+              <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
+              <br/>
+              <strong>${p.titleVideo}</strong><br/>
+              <em>Dari: ${p.channel}</em>
+            </a>
+          `;
+        }
+
         div.innerHTML = `
-          <button class="hapus-btn" onclick="hapusVideo('${video.id}')">✖</button>
-          <h3>${video.judulHalaman}</h3>
-          <a href="video.html?v=${video.id}">
-            <img src="${video.thumbnail}" alt="thumbnail" />
-            <br />
-            <strong>${video.title}</strong><br />
-            <em>Dari: ${video.channel}</em>
-          </a>
-          <p>${video.deskripsi}</p>
-          <p>➡️ Klik untuk buka halaman video</p>
+          <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
+          <h3>${p.judulHalaman}</h3>
+          ${isiVideo}
+          <p>${p.deskripsi}</p>
         `;
         container.appendChild(div);
       });
     }
 
     renderDaftar();
-
   </script>
 
 </body>
