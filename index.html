@@ -4,45 +4,30 @@
   <meta charset="UTF-8" />
   <title>Dashboard Presentasi Video</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f7f7f7; }
-    .input-container { max-width: 600px; margin-bottom: 30px; }
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 1rem;
-    }
-    .video-card {
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      position: relative;
-    }
-    .video-card img { width: 100%; max-width: 300px; }
-    .hapus-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: red;
-  color: black;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  line-height: 20px;
-  text-align: center;
-  padding: 0;
-  font-size: 18px;
-  user-select: none;
-}
-.hapus-btn:hover {
-  background: #cc0000;
-}
-
-  </style>
+  body { font-family: Arial; padding: 20px; max-width: 700px; margin: auto; }
+  iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* menjaga rasio */
+    border: none;
+  }
+  #thumbnail {
+    max-width: 100%;
+    margin-top: 10px;
+  }
+  #desc {
+    white-space: pre-wrap; /* supaya enter di deskripsi tampil */
+    margin-top: 15px;
+  }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: 10px;
+    margin-top: 10px;
+    resize: none; /* kita akan atur resize otomatis dengan JS */
+    min-height: 80px;
+  }
+</style>
 </head>
 <body>
 
