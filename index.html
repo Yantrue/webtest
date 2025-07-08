@@ -4,7 +4,15 @@
   <meta charset="UTF-8" />
   <title>Dashboard presentasi</title>
   <style>
-  body { font-family: Arial; padding: 20px; max-width: 700px; margin: auto; }
+  body { 
+    font-family: Arial; 
+    padding: 20px; 
+    max-width: 700px; 
+    margin: auto; 
+    background: #26619c; /* warna lapis lazuli */
+    color: white;
+    position: relative;
+  }
   iframe {
     width: 100%;
     aspect-ratio: 16 / 9; /* menjaga rasio */
@@ -28,91 +36,129 @@
     min-height: 80px;
   }
 
-    body {
-  font-family: Arial;
-  padding: 20px;
-  background: #26619c; /* warna lapis lazuli */
-  color: white;
-}
+  .input-container {
+    max-width: 600px;
+    margin-bottom: 30px;
+  }
 
-.input-container {
-  max-width: 600px;
-  margin-bottom: 30px;
-}
+  input, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    box-sizing: border-box;
+  }
 
-input, textarea, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: none;
-  box-sizing: border-box;
-}
+  input, textarea {
+    background: #d1d1d1;
+    color: #333;
+  }
 
-input, textarea {
-  background: #d1d1d1;
-  color: #333;
-}
+  button {
+    background: #004080;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+  }
 
-button {
-  background: #004080;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
-}
+  button:hover {
+    background: #003366;
+  }
 
-button:hover {
-  background: #003366;
-}
+  .video-card {
+    background: #b0b0b0; /* abu-abu */
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: none;
+    color: black;
+    position: relative;
+  }
 
-.video-card {
-  background: #b0b0b0; /* abu-abu */
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  border: none;
-  color: black;
-  position: relative;
-}
+  .video-card a {
+    color: black;
+    text-decoration: none;
+  }
 
-.video-card a {
-  color: black;
-  text-decoration: none;
-}
+  .video-card a:hover {
+    text-decoration: underline;
+  }
 
-.video-card a:hover {
-  text-decoration: underline;
-}
+  .hapus-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: red;
+    color: black;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 20px;
+    text-align: center;
+    padding: 0;
+    font-size: 18px;
+    user-select: none;
+  }
 
-.hapus-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: red;
-  color: black;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  line-height: 20px;
-  text-align: center;
-  padding: 0;
-  font-size: 18px;
-  user-select: none;
-}
+  .hapus-btn:hover {
+    background: #cc0000;
+  }
 
-.hapus-btn:hover {
-  background: #cc0000;
-}
-</style>
+  /* Styling playlist musik kiri atas */
+  #bgm-control {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+  }
+
+  #bgm-control select {
+    padding: 6px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+  }
+
+  #bgm-control button {
+    padding: 6px 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+
+  #bgm-control button:hover {
+    background: #0056b3;
+  }
+
+  </style>
 </head>
 <body>
 
-  
+  <!-- Playlist musik BGM -->
+  <div id="bgm-control">
+    <select id="playlist" disabled>
+      <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" selected>Background Musik</option>
+    </select>
+    <button id="toggle-play">Pause</button>
+  </div>
+
+  <audio id="bgm" autoplay loop></audio>
+
   <h1>📚 Dashboard Presentasi</h1>
 
   <div class="input-container">
@@ -126,6 +172,28 @@ button:hover {
   <div id="video-list"></div>
 
   <script>
+    // Playlist musik (satu lagu saja)
+    const audio = document.getElementById("bgm");
+    const playlist = document.getElementById("playlist");
+    const toggleBtn = document.getElementById("toggle-play");
+
+    audio.src = playlist.value;
+
+    toggleBtn.addEventListener("click", () => {
+      if(audio.paused) {
+        audio.play();
+        toggleBtn.textContent = "Pause";
+      } else {
+        audio.pause();
+        toggleBtn.textContent = "Play";
+      }
+    });
+
+    audio.play().catch(() => {
+      toggleBtn.textContent = "Play";
+    });
+
+    // Dashboard presentasi
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
       return match ? match[1] : null;
@@ -208,6 +276,7 @@ button:hover {
     }
 
     renderDaftar();
+
   </script>
 
 </body>
