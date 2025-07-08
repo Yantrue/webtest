@@ -176,30 +176,36 @@
       audio.src = item.url;
       audio.volume = 1;
       audio.load();
-      audio.play()
-        .then(() => {
-          toggleBtn.textContent = "Pause Musik BGM";
-          bgmStatus.textContent = `Memutar: ${item.title}`;
-        })
-        .catch(err => {
-          toggleBtn.textContent = "Play Musik BGM";
-          bgmStatus.textContent = "🔇 Tidak bisa autoplay, klik Play.";
-          console.warn(err);
-        });
       toggleBtn.disabled = false;
+      toggleBtn.textContent = "Play Musik BGM";
+      bgmStatus.textContent = `Ready to play: ${item.title}`;
     }
 
     select.addEventListener("change", () => {
       setAudioSource(select.value);
+      // Jika audio sedang play, pause dulu supaya gak tabrakan
+      if (!audio.paused) {
+        audio.pause();
+        toggleBtn.textContent = "Play Musik BGM";
+        bgmStatus.textContent = `Ready to play: ${playlist[select.value].title}`;
+      }
     });
 
     toggleBtn.addEventListener("click", () => {
       if (audio.paused && audio.src) {
-        audio.play();
-        toggleBtn.textContent = "Pause Musik BGM";
+        audio.play()
+          .then(() => {
+            toggleBtn.textContent = "Pause Musik BGM";
+            bgmStatus.textContent = `Memutar: ${playlist[select.value].title}`;
+          })
+          .catch(err => {
+            bgmStatus.textContent = "🔇 Tidak bisa autoplay, coba klik tombol play lagi.";
+            console.warn(err);
+          });
       } else {
         audio.pause();
         toggleBtn.textContent = "Play Musik BGM";
+        bgmStatus.textContent = `Paused: ${playlist[select.value].title}`;
       }
     });
 
@@ -279,37 +285,40 @@
 
     function renderDaftar() {
       const container = document.getElementById("video-list");
-      container.inner
-        if (daftarPresentasi.length === 0) {
-    container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
-    return;
-  }
+      container.innerHTML = "";
+      if (daftarPresentasi.length === 0) {
+        container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
+        return;
+      }
 
-  daftarPresentasi.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "video-card";
+      daftarPresentasi.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "video-card";
 
-    let isiVideo = "";
-    if (p.videoId) {
-      isiVideo = `
-        <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
-          <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
-          <br/>
-          <strong>${p.titleVideo}</strong><br/>
-          <em>Dari: ${p.channel}</em>
-        </a>
-      `;
+        let isiVideo = "";
+        if (p.videoId) {
+          isiVideo = `
+            <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
+              <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
+              <br/>
+              <strong>${p.titleVideo}</strong><br/>
+              <em>Dari: ${p.channel}</em>
+            </a>
+          `;
+        }
+
+        div.innerHTML = `
+          <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
+          <h3>${p.judulHalaman}</h3>
+          ${isiVideo}
+          <p>${p.deskripsi}</p>
+          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
+        `;
+        container.appendChild(div);
+      });
     }
 
-    div.innerHTML = `
-      <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
-      <h3>${p.judulHalaman}</h3>
-      ${isiVideo}
-      <p>${p.deskripsi}</p>
-      <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-renderDaftar();
+    renderDaftar();
+  </script>
+</body>
+</html>
