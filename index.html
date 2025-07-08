@@ -145,8 +145,14 @@
 
   <script>
     const playlist = [
-      { title: "BGM 1", url: "https://www.dropbox.com/scl/fi/k867azv3gf7po4y505upg/Stecu-Stecu-versi-Jepang-Xiinya.mp3?rlkey=rasg0j68ynjsb0j9e0q06gxxo&st=ko7v6p5b&raw=1" },
-      { title: "Musik BGM Contoh 2", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }
+      { 
+        title: "BGM 1", 
+        url: "https://dl.dropboxusercontent.com/s/k867azv3gf7po4y505upg/Stecu-Stecu-versi-Jepang-Xiinya.mp3" 
+      },
+      { 
+        title: "Musik BGM Contoh 2", 
+        url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" 
+      }
     ];
 
     const audio = document.getElementById("bgm");
@@ -237,4 +243,71 @@
 
       const presentasiBaru = {
         id: videoId || Date.now().toString(),
-        jud
+        judulHalaman: judul,
+        videoId,
+        titleVideo,
+        channel,
+        thumbnail,
+        deskripsi,
+        tanggalUpload: tanggalSekarang
+      };
+
+      daftarPresentasi.push(presentasiBaru);
+      localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
+
+      document.getElementById("judul-presentasi").value = "";
+      document.getElementById("youtube-link").value = "";
+      document.getElementById("video-desc").value = "";
+
+      renderDaftar();
+    }
+
+    function hapusPresentasi(id) {
+      if (!confirm("Yakin ingin menghapus presentasi ini?")) return;
+      daftarPresentasi = daftarPresentasi.filter(p => p.id !== id);
+      localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
+      renderDaftar();
+    }
+
+    function renderDaftar() {
+      const container = document.getElementById("video-list");
+      container.innerHTML = "";
+
+      if (daftarPresentasi.length === 0) {
+        container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
+        return;
+      }
+
+      daftarPresentasi.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "video-card";
+
+        let isiVideo = "";
+        if (p.videoId) {
+          isiVideo = `
+            <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
+              <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
+              <br/>
+              <strong>${p.titleVideo}</strong><br/>
+              <em>Dari: ${p.channel}</em>
+            </a>
+          `;
+        }
+
+        div.innerHTML = `
+          <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
+          <h3>${p.judulHalaman}</h3>
+          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
+          ${isiVideo}
+          <p>${p.deskripsi}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderDaftar();
+  </script>
+
+</body>
+</html>
+
