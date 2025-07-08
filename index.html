@@ -174,16 +174,18 @@
       const item = playlist[index];
       if (!item) return;
       audio.src = item.url;
-      audio.volume = 1; // set volume ke maksimum
+      audio.volume = 1;
       audio.load();
-      audio.play().then(() => {
-        toggleBtn.textContent = "Pause Musik BGM";
-        bgmStatus.textContent = `Memutar: ${item.title}`;
-      }).catch(err => {
-        toggleBtn.textContent = "Play Musik BGM";
-        bgmStatus.textContent = "🔇 Audio tidak bisa diputar otomatis. Klik Play.";
-        console.error(err);
-      });
+      audio.play()
+        .then(() => {
+          toggleBtn.textContent = "Pause Musik BGM";
+          bgmStatus.textContent = `Memutar: ${item.title}`;
+        })
+        .catch(err => {
+          toggleBtn.textContent = "Play Musik BGM";
+          bgmStatus.textContent = "🔇 Tidak bisa autoplay, klik Play.";
+          console.warn(err);
+        });
       toggleBtn.disabled = false;
     }
 
@@ -240,8 +242,8 @@
             titleVideo = data.title;
             channel = data.author_name;
           }
-        } catch {
-          // gagal ambil data video, tetap lanjut
+        } catch (e) {
+          console.warn("Gagal mengambil metadata video:", e);
         }
       }
 
@@ -277,44 +279,37 @@
 
     function renderDaftar() {
       const container = document.getElementById("video-list");
-      container.innerHTML = "";
+      container.inner
+        if (daftarPresentasi.length === 0) {
+    container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
+    return;
+  }
 
-      if (daftarPresentasi.length === 0) {
-        container.innerHTML = "<p>Bel
-      if (daftarPresentasi.length === 0) {
-        container.innerHTML = "<p>Belum ada presentasi yang ditambahkan.</p>";
-        return;
-      }
+  daftarPresentasi.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "video-card";
 
-      daftarPresentasi.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "video-card";
-
-        let isiVideo = "";
-        if (p.videoId) {
-          isiVideo = `
-            <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
-              <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
-              <br/>
-              <strong>${p.titleVideo}</strong><br/>
-              <em>Dari: ${p.channel}</em>
-            </a>
-          `;
-        }
-
-        div.innerHTML = `
-          <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
-          <h3>${p.judulHalaman}</h3>
-          ${isiVideo}
-          <p>${p.deskripsi}</p>
-          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
-        `;
-        container.appendChild(div);
-      });
+    let isiVideo = "";
+    if (p.videoId) {
+      isiVideo = `
+        <a href="https://www.youtube.com/watch?v=${p.videoId}" target="_blank" rel="noopener noreferrer">
+          <img src="${p.thumbnail}" alt="thumbnail" style="max-width:100%; border-radius:8px;" />
+          <br/>
+          <strong>${p.titleVideo}</strong><br/>
+          <em>Dari: ${p.channel}</em>
+        </a>
+      `;
     }
 
-    renderDaftar();
-  </script>
+    div.innerHTML = `
+      <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
+      <h3>${p.judulHalaman}</h3>
+      ${isiVideo}
+      <p>${p.deskripsi}</p>
+      <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
+    `;
+    container.appendChild(div);
+  });
+}
 
-</body>
-</html>
+renderDaftar();
