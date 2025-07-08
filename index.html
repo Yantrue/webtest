@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard Presentasi Simpel</title>
+  <title>Dashboard Presentasi Simpel dengan Tanggal</title>
   <style>
     body { 
       font-family: Arial; 
@@ -112,6 +112,11 @@
       min-height: 18px;
       color: #ddd;
     }
+    .tanggal-upload {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
@@ -139,7 +144,6 @@
   <div id="video-list"></div>
 
   <script>
-    // Playlist musik statis
     const playlist = [
       { title: "Musik BGM Contoh 1", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
       { title: "Musik BGM Contoh 2", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }
@@ -150,7 +154,6 @@
     const toggleBtn = document.getElementById("toggle-play");
     const bgmStatus = document.getElementById("bgm-status");
 
-    // Isi dropdown playlist
     function populatePlaylist() {
       select.innerHTML = "";
       playlist.forEach((item, i) => {
@@ -161,7 +164,6 @@
       });
     }
 
-    // Set audio source dan putar
     function setAudioSource(index) {
       const item = playlist[index];
       if (!item) return;
@@ -190,13 +192,17 @@
     populatePlaylist();
     setAudioSource(0);
 
-    // Fungsi bantu ambil ID video YouTube
     function getVideoId(url) {
       const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/);
       return match ? match[1] : null;
     }
 
     let daftarPresentasi = JSON.parse(localStorage.getItem("daftar_presentasi")) || [];
+
+    function formatTanggal(tgl) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(tgl).toLocaleDateString('id-ID', options);
+    }
 
     async function tambahPresentasi() {
       const judul = document.getElementById("judul-presentasi").value.trim();
@@ -223,24 +229,26 @@
             channel = data.author_name;
           }
         } catch {
-          // gagal ambil data video, biarkan tetap tambah presentasi tanpa video
+          // gagal ambil data video, tetap tambah presentasi tanpa video
         }
       }
 
+      const tanggalSekarang = new Date().toISOString();
+
       const presentasiBaru = {
-        id: videoId || Date.now().toString(), // pakai id video atau timestamp unik
+        id: videoId || Date.now().toString(),
         judulHalaman: judul,
         videoId,
         titleVideo,
         channel,
         thumbnail,
-        deskripsi
+        deskripsi,
+        tanggalUpload: tanggalSekarang
       };
 
       daftarPresentasi.push(presentasiBaru);
       localStorage.setItem("daftar_presentasi", JSON.stringify(daftarPresentasi));
 
-      // Clear input
       document.getElementById("judul-presentasi").value = "";
       document.getElementById("youtube-link").value = "";
       document.getElementById("video-desc").value = "";
@@ -283,6 +291,7 @@
         div.innerHTML = `
           <button class="hapus-btn" onclick="hapusPresentasi('${p.id}')">✖</button>
           <h3>${p.judulHalaman}</h3>
+          <div class="tanggal-upload">🗓️ Diunggah: ${formatTanggal(p.tanggalUpload)}</div>
           ${isiVideo}
           <p>${p.deskripsi}</p>
         `;
